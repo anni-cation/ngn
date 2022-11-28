@@ -3,11 +3,13 @@ import requests
 import time 
 
 # access key: page ID Test NGN (App)
-page_id_1 = 123
+page_id_1 = ''
 
 # access token, needed to provide access to page: we use https --> encrypted
 facebook_access_token_1 = 'xxx'
-# message that the facebook post should contain
+
+# messages that the facebook post should contain
+# last message creates an error --> empty post
 msg = ''
 planned_msgs = [
     "Hey guys, wish me luck for my presentation today!", 
@@ -22,8 +24,6 @@ planned_msgs = [
 post_url = 'https://graph.facebook.com/{}/feed'.format(page_id_1)
 
 def posting_loop():
-    # insert random get command
-
     for i in range(6):
         # create messages depending on counter value
         msg = planned_msgs[i]
@@ -40,12 +40,27 @@ def posting_loop():
         # print server response 
         print(r)
         print(r.text)
+
+        if "400" in r: 
+            return
         
         # wait 5 minutes (300 sec)
         time.sleep(300)
-    
+
+def post_image():
+    # prepare image 
+    image_url = 'https://graph.facebook.com/{}/photos'.format(page_id_1)
+    image_location = 'https://m.media-amazon.com/images/I/914EEhrnMmL._SS500_.jpg'
+    img_payload = {
+    'url': image_location,
+    'access_token': facebook_access_token_1
+    }
+
+    #Send the POST request
+    r = requests.post(image_url, data=img_payload)
+    print(r.text)
 
 if __name__ == "__main__":
-
     posting_loop()
+    post_image()
     
