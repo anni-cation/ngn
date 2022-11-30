@@ -3,7 +3,7 @@ import requests
 import time 
 
 # access key: page ID Test NGN (App)
-page_id_1 = ''
+page_id_1 = '101484006137344'
 
 # access token, needed to provide access to page: we use https --> encrypted
 facebook_access_token_1 = 'xxx'
@@ -14,9 +14,8 @@ msg = ''
 planned_msgs = [
     "Hey guys, wish me luck for my presentation today!", 
     "Oh wait, I'm just a Webservice and Annika did all the work before...",
-    "Hmm, I could have some breakfast...",
-    "I hope Annika is doing well!",
-    "Wow! 20 Minutes are already over, that was fast!",
+    "Hmm, I could have some breakfast... ",
+    "Watch out for the picture!",
     ""
 ]
 
@@ -24,7 +23,7 @@ planned_msgs = [
 post_url = 'https://graph.facebook.com/{}/feed'.format(page_id_1)
 
 def posting_loop():
-    for i in range(6):
+    for i in range(5):
         # create messages depending on counter value
         msg = planned_msgs[i]
 
@@ -41,7 +40,8 @@ def posting_loop():
         print(r)
         print(r.text)
 
-        if "400" in r: 
+        # return if status code == 400
+        if r.status_code == 400: 
             return
         
         # wait 5 minutes (300 sec)
@@ -56,11 +56,15 @@ def post_image():
     'access_token': facebook_access_token_1
     }
 
-    #Send the POST request
+    # send the POST request
     r = requests.post(image_url, data=img_payload)
+    print(r)
     print(r.text)
 
 if __name__ == "__main__":
     posting_loop()
     post_image()
-    
+
+
+
+
